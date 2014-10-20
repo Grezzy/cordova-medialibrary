@@ -8,12 +8,29 @@
 
 #import "MediaLibrary.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import <AVFoundation/AVAudioSession.h>
 
 @implementation MediaLibrary
-@synthesize player;
+
+@synthesize player, isMediaSelected;
+
+-(void)initPlayer
+{
+    if(self.player == nil){
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+        self.player = [MPMusicPlayerController systemMusicPlayer];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(musicPlayerPlayBackStatusChanged:)
+                                                     name:MPMusicPlayerControllerPlaybackStateDidChangeNotification
+                                                   object:nil];
+    }
+}
 
 // Configures and displays the media item picker.
 - (void) showMediaPicker :(CDVInvokedUrlCommand *)command {
+    
+    [self initPlayer];
     
 	MPMediaPickerController *picker = [[MPMediaPickerController alloc] initWithMediaTypes: MPMediaTypeMusic];
 	
@@ -41,26 +58,44 @@
 // Responds to the user tapping Done after choosing music.
 - (void) mediaPicker: (MPMediaPickerController *) mediaPicker didPickMediaItems: (MPMediaItemCollection *) mediaItemCollection {
     
-    if(player == nil){
-        player = [MPMusicPlayerController systemMusicPlayer];
-    }
+    [self initPlayer];
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     UIViewController *rootViewController = window.rootViewController;
     
     [rootViewController dismissViewControllerAnimated:YES completion:nil ];
     
-    [player setQueueWithItemCollection:mediaItemCollection];
-    [player play];
+    [self.player setQueueWithItemCollection:mediaItemCollection];
+    [self.player play];
+    self.isMediaSelected = YES;
 }
 
 
 // Responds to the user tapping done having chosen no music.
 - (void) mediaPickerDidCancel: (MPMediaPickerController *) mediaPicker {
+    
+    [self initPlayer];
+    
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     UIViewController *rootViewController = window.rootViewController;
     [rootViewController dismissViewControllerAnimated:YES completion:nil ];
 }
+
+- (void) play:(CDVInvokedUrlCommand *)command {
+    [self initPlayer];
+    if(self.isMediaSelected)[self.player play];
+}
+
+- (void) pause:(CDVInvokedUrlCommand *)command {
+    [self initPlayer];
+    if(self.isMediaSelected)[self.player pause];
+}
+
+-(void)musicPlayerPlayBackStatusChanged:(NSNotification *)notification
+{
+    NSLog(@"%ld", self.player.playbackState);
+}
+                  
 
 
 @end

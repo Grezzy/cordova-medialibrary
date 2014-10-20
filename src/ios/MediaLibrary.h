@@ -15,8 +15,11 @@
     
 }
 
+@property BOOL isMediaSelected;
 @property (nonatomic, retain) MPMusicPlayerController * player;
 
 - (void) showMediaPicker:(CDVInvokedUrlCommand *)command;
+- (void) play:(CDVInvokedUrlCommand *)command;
+- (void) pause:(CDVInvokedUrlCommand *)command;
 
 @end
