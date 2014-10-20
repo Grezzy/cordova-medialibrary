@@ -1,4 +1,4 @@
-cordova.define("com.lakomov.MediaLibrary", function (require, exports, module) { 
+cordova.define("com.lakomov.MediaLibrary.MediaLibrary", function(require, exports, module) {
     //
     // Use jsdoc to generate documentation.
 

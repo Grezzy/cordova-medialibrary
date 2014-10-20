@@ -11,19 +11,12 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface MediaLibrary : CDVPlugin <MPMediaPickerControllerDelegate, UITableViewDelegate> {
-    
-    
-    NSString * successCallback;
-    NSString * failureCallback;
+        
     
 }
 
-@property (nonatomic, retain) NSString * successCallback;
-@property (nonatomic, retain) NSString * failureCallback;
+@property (nonatomic, retain) MPMusicPlayerController * player;
 
-- (void) selectSong:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
-- (void) playSong:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
-- (void) showMediaPicker:(CDVInvokedUrlCommand *)command;;
-
+- (void) showMediaPicker:(CDVInvokedUrlCommand *)command;
 
 @end
