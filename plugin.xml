@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest"
+	id="com.lakomov.MediaLibrary"
+	version="0.0.1">
+
+  <!-- This plugin requires Cordova version 3.5.0 or newer. -->
+  <engines>
+    <engine name="cordova" version=">=3.5.0" />
+  </engines>
+
+  <name>Media Library Browser</name>
+  <description>This plugin allows your app to browse device media library and play music.</description>
+  <author>Artem Lakomov</author>
+  <keywords>media library, music, mp3</keywords>
+  <license>Apache 2.0</license>
+
+  <js-module src="www/medialibrary.js" name="MediaLibrary">
+    <clobbers target="window.MediaLibrary" />
+  </js-module>
+  
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="MediaLibrary">
+        <param name="ios-package" value="MediaLibrary"/>
+      </feature>
+    </config-file>
+    
+    <header-file src="src/ios/MediaLibrary.h" />
+    <source-file src="src/ios/MediaLibrary.m" />
+  </platform>
+
+</plugin>
