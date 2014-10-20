@@ -23,7 +23,7 @@
 
 - (void) selectSong:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
 - (void) playSong:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
-- (void) showMediaPicker;
+- (void) showMediaPicker:(CDVInvokedUrlCommand *)command;;
 
 
 @end

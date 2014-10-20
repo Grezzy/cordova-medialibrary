@@ -61,7 +61,7 @@
 
 
 // Configures and displays the media item picker.
-- (void) showMediaPicker {
+- (void) showMediaPicker :(CDVInvokedUrlCommand *)command {
     
 	MPMediaPickerController *picker = [[MPMediaPickerController alloc] initWithMediaTypes: MPMediaTypeMusic];
 	
