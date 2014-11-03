@@ -10,13 +10,11 @@ cordova.define("com.lakomov.MediaLibrary.MediaLibrary", function(require, export
     exports.showMediaPicker = function (successCallback, errorCallback, params) {
         cordova.exec(successCallback, errorCallback, "MediaLibrary", "showMediaPicker", [params]);
     };
-               
                exports.play = function (successCallback, errorCallback, params) {
                cordova.exec(successCallback, errorCallback, "MediaLibrary", "play", [params]);
                };
                exports.pause = function (successCallback, errorCallback, params) {
                cordova.exec(successCallback, errorCallback, "MediaLibrary", "pause", [params]);
                };
-
 
 });

@@ -66,7 +66,7 @@
     [rootViewController dismissViewControllerAnimated:YES completion:nil ];
     
     [self.player setQueueWithItemCollection:mediaItemCollection];
-    [self.player play];
+    //[self.player play];
     self.isMediaSelected = YES;
 }
 
