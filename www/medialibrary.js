@@ -1,4 +1,4 @@
-cordova.define("com.lakomov.MediaLibrary", function (require, exports, module) { 
+cordova.define("com.firerunner.cordova.MediaLibrary", function (require, exports, module) { 
     //
     // Use jsdoc to generate documentation.
 
@@ -7,8 +7,34 @@ cordova.define("com.lakomov.MediaLibrary", function (require, exports, module) {
     var exec = cordova.require('cordova/exec');
 
 
+exports.isSupported = function (successCallback, errorCallback, params) {
+        cordova.exec(successCallback, errorCallback, "MediaLibrary", "isSupported", [params]);
+    };
+
     exports.initialize = function (successCallback, errorCallback, params) {
         cordova.exec(successCallback, errorCallback, "MediaLibrary", "initialize", [params]);
     };
+    exports.showMediaPicker = function (successCallback, errorCallback, params) {
+        cordova.exec(successCallback, errorCallback, "MediaLibrary", "showMediaPicker", [params]);
+    };
+    exports.play = function (successCallback, errorCallback, params) {
+        cordova.exec(successCallback, errorCallback, "MediaLibrary", "play", [params]);
+    };
+    exports.pause = function (successCallback, errorCallback, params) {
+        cordova.exec(successCallback, errorCallback, "MediaLibrary", "pause", [params]);
+    };
+    exports.getArtists = function (successCallback, errorCallback, params) {
+            cordova.exec(successCallback, errorCallback, "MediaLibrary", "getArtists", [params]);
+        };
+        exports.getAlbumsByArtist = function (successCallback, errorCallback, params) {
+                    cordova.exec(successCallback, errorCallback, "MediaLibrary", "getAlbumsByArtist", [params]);
+                };
+
+                 exports.getSongsByAlbum = function (successCallback, errorCallback, params) {
+                            cordova.exec(successCallback, errorCallback, "MediaLibrary", "getSongsByAlbum", [params]);
+                        };
+                        exports.getAlbums = function (successCallback, errorCallback, params) {
+                                                    cordova.exec(successCallback, errorCallback, "MediaLibrary", "getAlbums", [params]);
+                                                };
 
 });
