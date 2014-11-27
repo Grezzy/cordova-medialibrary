@@ -36,5 +36,14 @@ exports.isSupported = function (successCallback, errorCallback, params) {
                         exports.getAlbums = function (successCallback, errorCallback, params) {
                                                     cordova.exec(successCallback, errorCallback, "MediaLibrary", "getAlbums", [params]);
                                                 };
+    exports.getPlaylists = function (successCallback, errorCallback, params) {
+            cordova.exec(successCallback, errorCallback, "MediaLibrary", "getPlaylists", [params]);
+        };
 
+        exports.getSongsByPlaylist = function (successCallback, errorCallback, params) {
+                    cordova.exec(successCallback, errorCallback, "MediaLibrary", "getSongsByPlaylist", [params]);
+                };
+    exports.getSongFiles = function (successCallback, errorCallback, params) {
+                cordova.exec(successCallback, errorCallback, "MediaLibrary", "getSongFiles", [params]);
+            };
 });
