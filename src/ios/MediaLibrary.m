@@ -8,80 +8,49 @@
 
 #import "MediaLibrary.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import <AVFoundation/AVAudioSession.h>
 
 @implementation MediaLibrary
-@synthesize successCallback, failureCallback;
 
-- (void) selectSong:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options
-{
-    
-    NSUInteger argc = [arguments count];
-	
-	if (argc > 0) 
-    {
-        [self setSuccessCallback:[arguments objectAtIndex:0]];
-    }
-    
-	if (argc > 1) 
-    {
-        
-        [self setFailureCallback:[arguments objectAtIndex:1]];   
-    }
-	
-	if (argc < 1) {
-		NSLog(@"iPodCommand.selectSong: Missing 1st parameter: successCallback");
-		return;
-	}
-    
-    
-    
-    [self showMediaPicker];
-    
-}
-- (void) playSong:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options
-{
-    
-    MPMusicPlayerController * musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
-    
-    MPMediaItemCollection * items = [(HelloPhoneGapAppDelegate*)[self appDelegate] selectedSong];
-    if (items)
-    {
-        [musicPlayer setQueueWithItemCollection: items];
-        
-        MPMusicPlaybackState playbackState = [musicPlayer playbackState];
-        
-        if (playbackState == MPMusicPlaybackStateStopped || playbackState == MPMusicPlaybackStatePaused) {
-            [musicPlayer play];
-        } else if (playbackState == MPMusicPlaybackStatePlaying) {
-            [musicPlayer pause];
-        }
-    }
-    
-}
+@synthesize player, isMediaSelected;
 
+-(void)initPlayer
+{
+    if(self.player == nil){
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+        self.player = [MPMusicPlayerController systemMusicPlayer];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(musicPlayerPlayBackStatusChanged:)
+                                                     name:MPMusicPlayerControllerPlaybackStateDidChangeNotification
+                                                   object:nil];
+    }
+}
 
 // Configures and displays the media item picker.
-- (void) showMediaPicker {
+- (void) showMediaPicker :(CDVInvokedUrlCommand *)command {
+    
+    [self initPlayer];
     
 	MPMediaPickerController *picker = [[MPMediaPickerController alloc] initWithMediaTypes: MPMediaTypeMusic];
 	
     if (picker)
     {
         picker.delegate						= self;
-        picker.allowsPickingMultipleItems	= NO;
-        picker.prompt						= @"Select a song.";
+        picker.allowsPickingMultipleItems	= YES;
+        picker.prompt						= @"Select music to play.";
         
-        [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleDefault animated:YES];
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        UIViewController *rootViewController = window.rootViewController;
         
-        [[self appViewController] presentModalViewController: picker animated: YES];
-        [picker release];
+        [rootViewController presentViewController: picker animated: YES completion:nil ];
+        
     }
     else
     {
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"You must be running on a device for this to work!" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         
         [alert show];
-        [alert release];
     }
 }
 
@@ -89,49 +58,44 @@
 // Responds to the user tapping Done after choosing music.
 - (void) mediaPicker: (MPMediaPickerController *) mediaPicker didPickMediaItems: (MPMediaItemCollection *) mediaItemCollection {
     
-	[[self appViewController] dismissModalViewControllerAnimated: YES];
+    [self initPlayer];
     
-    if (mediaItemCollection)
-    {
-        if ([mediaItemCollection count] == 1)
-        {
-            MPMediaItem * song = [[mediaItemCollection items] objectAtIndex:0];
-            
-            [(HelloPhoneGapAppDelegate*)[self appDelegate] setSelectedSong:mediaItemCollection];            
-            NSMutableDictionary * songInfo = [NSMutableDictionary dictionary];
-            [songInfo setValue:[song valueForProperty:MPMediaItemPropertyTitle] forKey:@"title"];
-            [songInfo setValue:[song valueForProperty:MPMediaItemPropertyAlbumTitle] forKey:@"albumTitle"];
-            [songInfo setValue:[song valueForProperty:MPMediaItemPropertyArtist] forKey:@"artist"];
-            [songInfo setValue:[song valueForProperty:MPMediaItemPropertyGenre] forKey:@"genre"];
-            
-            NSString * json = [songInfo JSONFragment];
-            [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"songInfo = %@;%@(songInfo);", json, successCallback]];
-        }
-        
-    }
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    UIViewController *rootViewController = window.rootViewController;
     
-    else
-    {
-        [(HelloPhoneGapAppDelegate*)[self appDelegate] setSelectedSong:nil];
-    }
+    [rootViewController dismissViewControllerAnimated:YES completion:nil ];
     
-	[[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackOpaque animated:YES];
+    [self.player setQueueWithItemCollection:mediaItemCollection];
+    //[self.player play];
+    self.isMediaSelected = YES;
 }
 
 
 // Responds to the user tapping done having chosen no music.
 - (void) mediaPickerDidCancel: (MPMediaPickerController *) mediaPicker {
     
-	[[self appViewController] dismissModalViewControllerAnimated: YES];
+    [self initPlayer];
     
-	[[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackOpaque animated:YES];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    UIViewController *rootViewController = window.rootViewController;
+    [rootViewController dismissViewControllerAnimated:YES completion:nil ];
 }
 
--(void) dealloc
-{
-    [successCallback release];
-    [failureCallback release];
-    [super dealloc];
+- (void) play:(CDVInvokedUrlCommand *)command {
+    [self initPlayer];
+    if(self.isMediaSelected)[self.player play];
 }
+
+- (void) pause:(CDVInvokedUrlCommand *)command {
+    [self initPlayer];
+    if(self.isMediaSelected)[self.player pause];
+}
+
+-(void)musicPlayerPlayBackStatusChanged:(NSNotification *)notification
+{
+    NSLog(@"%ld", self.player.playbackState);
+}
+                  
+
 
 @end
