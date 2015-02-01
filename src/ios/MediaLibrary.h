@@ -18,8 +18,17 @@
 @property BOOL isMediaSelected;
 @property (nonatomic, retain) MPMusicPlayerController * player;
 
+- (void) isSupported:(CDVInvokedUrlCommand *)command;
+- (void) initialize:(CDVInvokedUrlCommand *)command;
 - (void) showMediaPicker:(CDVInvokedUrlCommand *)command;
 - (void) play:(CDVInvokedUrlCommand *)command;
 - (void) pause:(CDVInvokedUrlCommand *)command;
+- (void) getArtists:(CDVInvokedUrlCommand *)command;
+- (void) getAlbumsByArtist:(CDVInvokedUrlCommand *)command;
+- (void) getSongsByAlbum:(CDVInvokedUrlCommand *)command;
+- (void) getAlbums:(CDVInvokedUrlCommand *)command;
+- (void) getPlaylists:(CDVInvokedUrlCommand *)command;
+- (void) getSongsByPlaylist:(CDVInvokedUrlCommand *)command;
+- (void) getSongFiles:(CDVInvokedUrlCommand *)command;
 
 @end
