@@ -165,6 +165,7 @@ public class MediaLibrary extends CordovaPlugin {
                 final int dataIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
                 final int albumIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID);
                 final int durationIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
+                final int trackNumberIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TRACK);
                 final JSONObject song = new JSONObject();
                 try{
                     song.put("id", cursor.getInt(idIdx));
@@ -175,6 +176,7 @@ public class MediaLibrary extends CordovaPlugin {
                     song.put("title", cursor.getString(titleIdx));
                     song.put("url", cursor.getString(dataIdx));
                     song.put("duration", cursor.getString(durationIdx));
+                    song.put("trackNumber", cursor.getInt(trackNumberIdx));
                     songs.put(song);
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
@@ -240,6 +242,8 @@ public class MediaLibrary extends CordovaPlugin {
                 final int dataIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
                 final int albumIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID);
                 final int durationIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
+                final int trackNumberIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TRACK);
+
                 final JSONObject song = new JSONObject();
                 try{
                     song.put("id", cursor.getInt(idIdx));
@@ -250,6 +254,7 @@ public class MediaLibrary extends CordovaPlugin {
                     song.put("title", cursor.getString(titleIdx));
                     song.put("url", cursor.getString(dataIdx));
                     song.put("duration", cursor.getString(durationIdx));
+                    song.put("trackNumber", cursor.getInt(trackNumberIdx));
                     songs.put(song);
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
@@ -312,6 +317,7 @@ public class MediaLibrary extends CordovaPlugin {
                 final int albumIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Playlists.Members.ALBUM_ID);
                 final int durationIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Playlists.Members.DURATION);
                 final int playlistIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Playlists.Members.PLAYLIST_ID);
+                final int trackNumberIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Playlists.Members.TRACK);
                 final JSONObject song = new JSONObject();
                 try{
                     song.put("id", cursor.getInt(idIdx));
@@ -323,6 +329,7 @@ public class MediaLibrary extends CordovaPlugin {
                     song.put("url", cursor.getString(dataIdx));
                     song.put("duration", cursor.getString(durationIdx));
                     song.put("playlistId", cursor.getString(playlistIdIdx));
+                    song.put("trackNumber", cursor.getInt(trackNumberIdx));
                     songs.put(song);
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
